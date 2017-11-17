@@ -1,10 +1,7 @@
 # Project 
-models/*
-grey_images/*
-train/*
-test/*
 
-
+*.jpg
+*.h5
 
 
 # Byte-compiled / optimized / DLL files
