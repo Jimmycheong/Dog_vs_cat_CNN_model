@@ -92,6 +92,6 @@ Save the model
 '''
 
 
-model_file_name = "weights/my_model.h5"
+model_file_name = "models/my_model.h5"
 print("\nSaving model as {} ...".format(model_file_name))
 classifier.save(model_file_name)

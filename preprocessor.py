@@ -7,6 +7,7 @@ import shutil
 import scipy.misc
 import time
 from methods import(
+    timer,
     grab_random_samples_from_dir,
     read_image_and_set_shape,
     convert_to_greyscale,
@@ -81,7 +82,7 @@ if __name__ == '__main__':
     try: 
         params['image_folder'] = os.getcwd() + '/' + input("Enter a folder to grab random_images from: ")
         params['number_of_random_samples'] = input("Enter a number of random samples: ")
-        params['name_of_save_dir'] = input("Enter the name of a file to save to (optional): ")
+        params['name_of_save_dir'] = input("Enter the name of a folder to save to (optional): ")
         params['name_of_greyscale_files'] = input("Enter the name of a greyscaled_file (optional): ")
         params['rescale_size'] = input("Enter a rescale factor (0 < x <= 1). Default is 0.5 : ")
     except Exception as e:
