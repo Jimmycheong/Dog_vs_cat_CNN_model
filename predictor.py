@@ -20,7 +20,7 @@ from methods import (
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
 # Dictionary
-dict_ = {
+DICT = {
     '0' : "Cat",
     '1' : "Dog"
 }
@@ -29,52 +29,61 @@ dict_ = {
 Preprocess image before prediction
 '''
 
-# Load model into memory
-cnn_model = load_model('models/my_model_1600_400.h5')
+def predict(model, image):
 
-# Read prediction image
-image = read_image_and_set_shape("train/cat_samples/cat.208.jpg")
+    # Load model into memory
+    cnn_model = load_model(model)
 
-# # Resize image
-resized_image = resize_image_with_new_shape(image, [64,64])
+    # Read prediction image
+    image = read_image_and_set_shape(image)
 
-#Greyscale image
-greyscale_image = convert_to_greyscale(resized_image)
+    # # Resize image
+    resized_image = resize_image_with_new_shape(image, [64,64])
 
-x = tf.Variable(greyscale_image, name='x')
-model = tf.global_variables_initializer()
+    #Greyscale image
+    greyscale_image = convert_to_greyscale(resized_image)
 
-with tf.Session() as session:
-    session.run(model)
-    result = session.run(x)
+    x = tf.Variable(greyscale_image, name='x')
+    model = tf.global_variables_initializer()
 
-# Reexpand shape from (64, 64) to (64, 64, 3)
-result = np.stack((result,) * 3, axis=2)
+    with tf.Session() as session:
+        session.run(model)
+        result = session.run(x)
 
-# Predictions require an input of 4 dimenions. In other words, an array of image arrays
-results = np.array([result])
+    # Reexpand shape from (64, 64) to (64, 64, 3)
+    result = np.stack((result,) * 3, axis=2)
+
+    # Predictions require an input of 4 dimenions. In other words, an array of image arrays
+    results = np.array([result])
 
 
-'''
-Make predictions
-'''
+    '''
+    Make predictions
+    '''
 
-prediction = cnn_model.predict(results).tolist()[0][0]
+    prediction = cnn_model.predict(results).tolist()[0][0]
 
-prediction_key = dict_[str(int(prediction))]
+    prediction_key = DICT[str(int(prediction))]
 
-print("Prediction: ", prediction_key)
+    print("Prediction: ", prediction_key)
 
-del cnn_model
+    del model
 
-'''
-Show prediction image, just uncomment this to view
+    '''
+    Show prediction image, just uncomment this to view
 
-'''
+    '''
 
-# Squeeze image to plot
-result = np.squeeze(result)
-imgplot = plt.imshow(result)
-imgplot.set_cmap('gray')
+    # Squeeze image to plot
+    result = np.squeeze(result)
+    imgplot = plt.imshow(result)
+    imgplot.set_cmap('gray')
 
-plt.show(imgplot)
+    plt.show(imgplot)
+
+
+if __name__ == "__main__":
+    model = input("Enter a model to use: ")
+    image = input("Enter a path to the image you want to predict: ")
+
+    predict(model, image)
